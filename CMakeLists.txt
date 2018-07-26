@@ -2,10 +2,8 @@ cmake_minimum_required(VERSION 3.2.2)
 project(wpa_ctrl C CXX)
 set(EXECUTABLE_BUILD_TYPE Release)
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-add_compile_options(-Wall -Wextra)
 add_definitions(
     -DCONFIG_AP=y
-    -DOS_NO_C_LIB_DEFINES=y
     -DCONFIG_AUTOSCAN_EXPONENTIAL=y
     -DCONFIG_AUTOSCAN_PERIODIC=y
     -DCONFIG_BACKEND=file
@@ -50,6 +48,8 @@ add_definitions(
     -DCONFIG_WPS_NFC=y
     -DCONFIG_TLS_DEFAULT_CIPHERS="DEFAULT:!EXP:!LOW:3DES")
 
-add_library(wpa_ctrl external/wpa_supplicant/src/common/wpa_ctrl.c)
+add_library(wpa_ctrl external/wpa_supplicant/src/common/wpa_ctrl.c
+    external/wpa_supplicant/src/utils/os_unix.c)
 target_include_directories(wpa_ctrl PUBLIC "external/wpa_supplicant/src/common/")
 target_include_directories(wpa_ctrl PUBLIC "external/wpa_supplicant/src/utils/")
+target_compile_options(wpa_ctrl PUBLIC -Wall -Wextra -Wno-variadic-macros)
